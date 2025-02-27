@@ -8,7 +8,7 @@ public class TestsBoxes {
     @Test
     public void testBoxAdd(){
         Box b = new Box();
-        b.add("truc1");
-        b.add("truc2");
+        b.add(new Thing("truc1"));
+        b.add(new Thing("truc1"));
     }
 }
