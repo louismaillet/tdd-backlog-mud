@@ -1,4 +1,6 @@
+import java.io.FileReader;
 import java.util.ArrayList;
+import com.google.gson.Gson;
 class Box {
     private ArrayList<Thing> contents = new ArrayList<>();
     private boolean isOpen = false;
@@ -102,4 +104,15 @@ class Box {
         }
         return null;
     }
+
+    //partie 6 json
+
+    public static void fromJSON(){
+        FileReader fr = new FileReader("/home/iut45/Etudiants/o22406805/Documents/Dossier but/tdd-backlog-mud/JsonBox.json");
+        Gson gson = new Gson();
+        Box ma_boite = gson.fromJson(fr, Box.class);
+
+    }   
+
 }
+
