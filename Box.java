@@ -1,37 +1,13 @@
 import java.util.ArrayList;
-
-class Thing {
-    String name;
-    int volume;
-
-    public Thing(String name) {
-        this.name = name;
-    }
-
-    public Thing(String name, int volume) {
-        this.name = name;
-        this.volume = volume;
-    }
-
-    public int getVolume() {
-        return volume;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public boolean hasName(String name) {
-        return this.name.equals(name);
-    }
-
-
-}
-
 class Box {
     private ArrayList<Thing> contents = new ArrayList<>();
     private boolean isOpen = false;
-    private int capacity = -1;
+    private int capacity;
+
+    public Box(boolean isOpen, int capacity) {
+        this.isOpen = isOpen;
+        this.capacity = capacity;
+    }
 
     public void setCapacity(int capacity) {
         this.capacity = capacity;
@@ -42,27 +18,27 @@ class Box {
     }
 
     public void add(Thing truc){
-        
-        this.contents.add(truc);
+        if (hasRoomFor(truc)) {
+            this.contents.add(truc);
+        } else {
+            System.out.println("La boîte est pleine.");
         }
-    
+    }  
 
     public boolean contains(Thing truc) {
         return contents.contains(truc);
     }
 
-    public void remove(Thing truc)   {
+    public void remove(Thing truc) {
         contents.remove(truc);
     }            
     
     public void open() {
         isOpen = true;
-        System.out.println("La boîte est maintenant ouverte.");
     }
 
     public void close() {
         isOpen = false;
-        System.out.println("La boîte est maintenant fermée.");
     }
 
     public boolean isOpen() {
@@ -75,9 +51,55 @@ class Box {
         }
         String phrase = "La boîte contient : ";
         for (Thing truc : contents) {
-            phrase += truc.name + ", ";
+            phrase += truc.getName() + ", ";
         }
         return phrase;
     }
 
+    public String actionLookV2() {
+        if (!isOpen) {
+            return "La boîte est fermée.";
+        }
+        ArrayList<String> names = new ArrayList<>();
+        for (Thing truc : contents) {
+            names.add(truc.getName());
+        }
+        return "La boîte contient : " + String.join(", ", names);
+    }
+    
+    public boolean hasRoomFor(Thing t) {
+        if ( this.capacity == -1){
+            return true;
+        }
+        int totalVolume = 0;
+        for (Thing truc : contents) {
+            totalVolume += truc.volume();
+        }
+        return (totalVolume + t.volume()) <= this.capacity;
+    }
+
+    public boolean actionAdd(Thing t) {
+        if (this.isOpen()) {
+            if (hasRoomFor(t)) {
+                add(t);
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
+    }
+    
+    public Thing find(String name) {
+        if (!isOpen) {
+            return null;
+        }
+        for (Thing truc : contents) {
+            if (truc.hasName(name)) {
+                return truc;
+            }
+        }
+        return null;
+    }
 }
